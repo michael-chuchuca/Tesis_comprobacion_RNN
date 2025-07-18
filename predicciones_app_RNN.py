@@ -109,7 +109,9 @@ df_comparacion = pd.merge(df_real, forecast, on='ds', how='left')
 fecha_corte = df_real['ds'].max()
 
 fig, ax = plt.subplots(figsize=(14, 6))
-ax.plot(df_comparacion['ds'], df_comparacion['y'], 'b--', label='Cantidad Real Suavizada', linewidth=2)
+serie_original = df_item_raw.groupby(pd.Grouper(key='FECHA_VENTA', freq='W'))['CANTIDAD_VENDIDA'].sum().reset_index()
+ax.plot(serie_original['FECHA_VENTA'], serie_original['CANTIDAD_VENDIDA'], 'c--', label='Serie Original', linewidth=1.2)
+ax.plot(df_comparacion['ds'], df_comparacion['y'], 'b--', label='Cantidad Real', linewidth=2)
 ax.plot(forecast['ds'], forecast['yhat'], 'r--', label='Cantidad Pronosticada', linewidth=2)
 ax.axvline(fecha_corte, color='gray', linestyle=':', alpha=0.7)
 ax.annotate('Inicio de Predicción', xy=(fecha_corte, ax.get_ylim()[1]*0.9),
